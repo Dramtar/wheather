@@ -1,0 +1,15 @@
+<resources>
+    <string name="title_activity_maps">Карта</string>
+    <string name="title_detail_fragment">Детальный прогноз</string>
+    <string name="day_tab">на день</string>
+    <string name="week_tab">на неделю</string>
+
+    <string name="no_internet_connection">Ой! нет интернет соединения, попробуй позже</string>
+    <string name="exit">Выход :(</string>
+
+    <string name="to_map">На карту</string>
+
+    <string name="wind_dir">Направление ветра</string>
+    <string name="wind_spd">Скорость ветра</string>
+    <string name="relative_humidity">ОВ</string>
+</resources>

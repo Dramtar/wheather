@@ -1,0 +1,41 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.dramtar.weatherbit"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            buildConfigField "String", "WEATHERBIT_KEY", "\"bb999c697c724a068684c543f9f840bf\""
+            buildConfigField "String", "WEATHERBIT_URL", "\"https://api.weatherbit.io/v2.0/\""
+        }
+        release {
+            minifyEnabled false
+            buildConfigField "String", "WEATHERBIT_KEY", "\"bb999c697c724a068684c543f9f840bf\""
+            buildConfigField "String", "WEATHERBIT_URL", "\"https://api.weatherbit.io/v2.0/\""
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha01'
+    implementation 'com.squareup:otto:1.3.8'
+    implementation 'com.squareup.retrofit:retrofit:1.9.0'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+
+    implementation 'com.jakewharton:butterknife:9.0.0-rc1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
+}

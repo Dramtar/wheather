@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name" translatable="false">WeatherBit</string>
+
+    <string name="temperature_place_holder" translatable="false"> %s ℃</string>
+    <string name="percentage_place_holder" translatable="false"> %1$d%%</string>
+    <string name="mc_place_holder" translatable="false"> %d m/c</string>
+
+    <string name="title_activity_maps">Map</string>
+    <string name="title_detail_fragment">Detail forecast</string>
+
+    <string name="day_tab">by Day</string>
+    <string name="week_tab">by Week</string>
+
+    <string name="no_internet_connection">Oops! no internet connection, try later</string>
+    <string name="exit">Exit :(</string>
+
+    <string name="to_map">To map</string>
+
+
+
+    <string name="wind_dir">Wind direction</string>
+    <string name="wind_spd">Wind speed</string>
+    <string name="relative_humidity">RH</string>
+</resources>

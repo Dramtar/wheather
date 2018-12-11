@@ -1,0 +1,15 @@
+<resources>
+    <string name="title_activity_maps">Мапа</string>
+    <string name="title_detail_fragment">Детальний прогноз</string>
+    <string name="day_tab">День</string>
+    <string name="week_tab">Неделя</string>
+
+    <string name="no_internet_connection">Лишенько! Немає підключення до інтернету, спробуй пізніше</string>
+    <string name="exit">Вихід :(</string>
+
+    <string name="to_map">До мапи</string>
+
+    <string name="wind_dir">Напрямок вітру</string>
+    <string name="wind_spd">Швидкість вітру</string>
+    <string name="relative_humidity">ВВ</string>
+</resources>

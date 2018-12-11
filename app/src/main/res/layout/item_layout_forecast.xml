@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_margin="8dp"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/date_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
+
+    <com.dramtar.weatherbit.widget.view.ImageView
+        android:id="@+id/weather_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/temp_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/title_wind_dir"
+        android:layout_width="wrap_content"
+        android:text="@string/wind_dir"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/gray"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/wind_dir_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/title_wind_spd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wind_spd"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/gray"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/wind_speed_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/title_relative_humidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/gray"
+        android:text="@string/relative_humidity"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/relative_humidity_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
+
+</LinearLayout>
