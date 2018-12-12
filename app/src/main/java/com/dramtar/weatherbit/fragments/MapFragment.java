@@ -12,9 +12,10 @@ import android.widget.TextView;
 import com.dramtar.weatherbit.MainActivity;
 import com.dramtar.weatherbit.R;
 import com.dramtar.weatherbit.libs.Utils;
+import com.dramtar.weatherbit.libs.model.Forecast;
 import com.dramtar.weatherbit.libs.network.Network;
 import com.dramtar.weatherbit.libs.network.response.CurrentWeatherResponse;
-import com.dramtar.weatherbit.model.Forecast;
+import com.dramtar.weatherbit.libs.network.response.WeatherResponse;
 import com.dramtar.weatherbit.widget.view.ConnectionErrorDialog;
 import com.dramtar.weatherbit.widget.view.ImageView;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -158,9 +159,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mBubbleContainer.setVisibility(View.VISIBLE);
             mBubbleContainer.animate().setInterpolator(new OvershootInterpolator()).translationY(0).setDuration(300).start();
         }
-        mWeatherIcon.setImageURL(mForecast.getIllustrationWeather().getIconLink());
-        mDescriptionView.setText(mForecast.getIllustrationWeather().getDescription());
-        mTempView.setText(getString(R.string.temperature_place_holder, mForecast.getTemperature()));
+        mWeatherIcon.setImageURL(mForecast.getIllustrateWeather().getIconLink());
+        mDescriptionView.setText(mForecast.getIllustrateWeather().getDescription());
+        mTempView.setText(getString(R.string.temperature_place_holder, mForecast.getTemperatureString()));
         mCityName.setText(mForecast.getCityName());
     }
 

@@ -1,16 +1,18 @@
 package com.dramtar.weatherbit.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.dramtar.weatherbit.MainActivity;
 import com.dramtar.weatherbit.R;
-import com.dramtar.weatherbit.libs.db.ForecastReaderDbHelper;
+import com.dramtar.weatherbit.libs.db.AppDB;
+import com.dramtar.weatherbit.libs.db.entity.ForecastEntityDay;
+import com.dramtar.weatherbit.libs.model.Forecast;
 import com.dramtar.weatherbit.libs.network.Network;
 import com.dramtar.weatherbit.libs.network.response.DayForecastResponse;
-import com.dramtar.weatherbit.model.Forecast;
 import com.dramtar.weatherbit.widget.adapter.ForecastAdapter;
 import com.squareup.otto.Subscribe;
 
@@ -32,7 +34,7 @@ public class DayForecastFragment extends Fragment {
     RecyclerView mRecyclerView;
 
     private Unbinder mUnBinder;
-    private ForecastReaderDbHelper mDBHelper;
+    private AppDB mDBHelper;
     private Forecast mForecast;
 
     @Override
@@ -40,11 +42,11 @@ public class DayForecastFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list_forecasts, container, false);
         mUnBinder = ButterKnife.bind(this, view);
 
-        mDBHelper = new ForecastReaderDbHelper(getContext());
+        mDBHelper = AppDB.getInstance(getContext());
         mForecast = MainActivity.getForecast();
 
-        if (mDBHelper.checkIsExistForecastDay(mForecast.getCityName())) {
-            List<Forecast> forecasts = mDBHelper.readAllForecastDay(mForecast.getCityName());
+        if (!mDBHelper.forecastDayDao().getForecastsByCity(mForecast.getCityName()).isEmpty()) {
+            List<? extends Forecast> forecasts = mDBHelper.getForecastsDay(mForecast.getCityName());
             mRecyclerView.setAdapter(new ForecastAdapter(getActivity(), forecasts, true));
         }
         return view;
@@ -53,7 +55,7 @@ public class DayForecastFragment extends Fragment {
     @Subscribe
     public void onDayForecastResponse(DayForecastResponse response) {
         mRecyclerView.setAdapter(new ForecastAdapter(getActivity(), response.getForecasts(), true));
-        mDBHelper.writeAllForecastDay(response.getForecasts());
+        mDBHelper.updateForecasts(response.getForecasts());
     }
 
     @Override

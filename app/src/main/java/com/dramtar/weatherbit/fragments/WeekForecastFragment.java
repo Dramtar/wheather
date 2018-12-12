@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 
 import com.dramtar.weatherbit.MainActivity;
 import com.dramtar.weatherbit.R;
-import com.dramtar.weatherbit.libs.db.ForecastReaderDbHelper;
+import com.dramtar.weatherbit.libs.db.AppDB;
+import com.dramtar.weatherbit.libs.model.Forecast;
 import com.dramtar.weatherbit.libs.network.Network;
 import com.dramtar.weatherbit.libs.network.response.WeekForecastResponse;
-import com.dramtar.weatherbit.model.Forecast;
 import com.dramtar.weatherbit.widget.adapter.ForecastAdapter;
 import com.squareup.otto.Subscribe;
 
@@ -32,7 +32,7 @@ public class WeekForecastFragment extends Fragment {
     RecyclerView mRecyclerView;
 
     private Unbinder mUnBinder;
-    private ForecastReaderDbHelper mDBHelper;
+    private AppDB mDBHelper;
     private Forecast mForecast;
 
     @Override
@@ -42,10 +42,10 @@ public class WeekForecastFragment extends Fragment {
 
         mForecast = MainActivity.getForecast();
 
-        mDBHelper = new ForecastReaderDbHelper(getContext());
-        if (mDBHelper.checkIsExistForecastWeek(mForecast.getCityName())) {
-            List<Forecast> forecasts = mDBHelper.readAllForecastWeek(mForecast.getCityName());
-            mRecyclerView.setAdapter(new ForecastAdapter(getActivity(), forecasts, true));
+        mDBHelper = AppDB.getInstance(getContext());
+        if (!mDBHelper.getForecastsWeek(mForecast.getCityName()).isEmpty()) {
+            List<? extends Forecast> forecasts = mDBHelper.getForecastsWeek(mForecast.getCityName());
+            mRecyclerView.setAdapter(new ForecastAdapter(getActivity(), forecasts, false));
         }
         return view;
     }
@@ -53,7 +53,7 @@ public class WeekForecastFragment extends Fragment {
     @Subscribe
     public void onWeekForecastResponse(WeekForecastResponse response) {
         mRecyclerView.setAdapter(new ForecastAdapter(getActivity(), response.getForecasts(), false));
-        mDBHelper.writeAllForecastWeek(response.getForecasts());
+        mDBHelper.updateForecastsWeek(response.getForecasts());
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.dramtar.weatherbit.libs.network;
 
 import com.dramtar.weatherbit.libs.network.response.Callback;
 import com.dramtar.weatherbit.libs.network.response.CurrentWeatherResponse;
+import com.dramtar.weatherbit.libs.network.response.WeatherResponse;
 import com.dramtar.weatherbit.libs.network.response.DayForecastResponse;
 import com.dramtar.weatherbit.libs.network.response.WeekForecastResponse;
 
