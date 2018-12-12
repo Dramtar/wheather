@@ -2,6 +2,7 @@ package com.dramtar.weatherbit.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,10 @@ import android.widget.TextView;
 
 import com.dramtar.weatherbit.MainActivity;
 import com.dramtar.weatherbit.R;
+import com.dramtar.weatherbit.libs.model.Forecast;
 import com.dramtar.weatherbit.libs.network.Network;
 import com.dramtar.weatherbit.libs.network.response.CurrentWeatherResponse;
-import com.dramtar.weatherbit.model.Forecast;
+import com.dramtar.weatherbit.libs.network.response.WeatherResponse;
 import com.dramtar.weatherbit.widget.view.ImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -97,17 +99,14 @@ public class DetailForecastFragment extends Fragment implements SwipeRefreshLayo
 
     private void refresh() {
         mRefresher.setRefreshing(false);
-        Network network = Network.getInstance();
-        network.getCurrentWeather(mForecast.getLatitude(), mForecast.getLongitude());
-        network.getDayForecast(mForecast.getLatitude(), mForecast.getLongitude());
-        network.getWeekForecast(mForecast.getLatitude(), mForecast.getLongitude());
+        Network.getInstance().getCurrentWeather(mForecast.getLatitude(), mForecast.getLongitude());
     }
 
     @Subscribe
     public void onCurrentWeatherResponse(CurrentWeatherResponse response) {
         mRefresher.setRefreshing(false);
         mForecast = response.getForecast();
-        MainActivity.saveCurrentForecast(mForecast);
+        MainActivity.saveCurrentForecast(response.getForecast());
         update();
     }
 
@@ -121,9 +120,9 @@ public class DetailForecastFragment extends Fragment implements SwipeRefreshLayo
     }
 
     private void update() {
-        mWeatherIcon.setImageURL(mForecast.getIllustrationWeather().getIconLink());
-        mTempView.setText(getString(R.string.temperature_place_holder, mForecast.getTemperature()));
-        mDescriptionView.setText(mForecast.getIllustrationWeather().getDescription());
+        mWeatherIcon.setImageURL(mForecast.getIllustrateWeather().getIconLink());
+        mTempView.setText(getString(R.string.temperature_place_holder, mForecast.getTemperatureString()));
+        mDescriptionView.setText(mForecast.getIllustrateWeather().getDescription());
         mCityName.setText(mForecast.getCityName());
     }
 

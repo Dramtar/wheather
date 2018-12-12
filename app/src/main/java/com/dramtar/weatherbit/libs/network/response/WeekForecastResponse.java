@@ -1,6 +1,6 @@
 package com.dramtar.weatherbit.libs.network.response;
 
-import com.dramtar.weatherbit.model.Forecast;
+import com.dramtar.weatherbit.libs.db.entity.ForecastEntityWeek;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -10,20 +10,24 @@ import java.util.List;
  */
 public class WeekForecastResponse extends Response {
     @SerializedName("data")
-    private List<Forecast> mForecasts;
+    private List<ForecastEntityWeek> mForecasts;
 
     @SerializedName("city_name")
     private String mCityName;
 
+    public ForecastEntityWeek getForecast() {
+        return mForecasts.get(0);
+    }
+
+    public List<ForecastEntityWeek> getForecasts() {
+        return mForecasts;
+    }
+
     @Override
     public void success() {
         super.success();
-        for (Forecast forecast : mForecasts) {
-            Forecast.Helper.setCityName(forecast, mCityName);
+        for (ForecastEntityWeek forecastEntityDay : mForecasts) {
+            forecastEntityDay.setCityName(mCityName);
         }
-    }
-
-    public List<Forecast> getForecasts() {
-        return mForecasts;
     }
 }
