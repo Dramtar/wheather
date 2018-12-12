@@ -28,6 +28,8 @@ public final class Utils {
 
     public static final String TIME_PATTERN = "HH:mm";
     public static final String DATE_TIME_PATTERN = "EEE, MMM d";
+    public static final String ICON_LINK_PREFIX = "https://www.weatherbit.io/static/img/icons/";
+    public static final String ICON_LINK_POSTFIX = ".png";
     private static final Gson GSON = new Gson();
 
     @SuppressLint("SimpleDateFormat")

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dramtar.weatherbit.R;
-import com.dramtar.weatherbit.model.Forecast;
+import com.dramtar.weatherbit.libs.model.Forecast;
 import com.dramtar.weatherbit.widget.view.ImageView;
 
 import java.util.List;
@@ -21,11 +21,11 @@ import butterknife.ButterKnife;
  * Created by Dramtar on 2018-12-09
  */
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHolder> {
-    private List<Forecast> mForecasts;
+    private List<? extends Forecast> mForecasts;
     private Context mContext;
     private boolean isDayForecast;
 
-    public ForecastAdapter(Context context, List<Forecast> forecasts, boolean isDayForecast) {
+    public ForecastAdapter(Context context, List<? extends Forecast> forecasts, boolean isDayForecast) {
         mContext = context;
         this.isDayForecast = isDayForecast;
         this.mForecasts = forecasts;
@@ -47,10 +47,10 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
             holder.mDateView.setText(forecast.getDateString());
         }
 
-        holder.mTempView.setText(mContext.getString(R.string.temperature_place_holder, forecast.getTemperature()));
-        holder.mWeatherIcon.setImageURL(forecast.getIllustrationWeather().getIconLink());
+        holder.mTempView.setText(mContext.getString(R.string.temperature_place_holder, forecast.getTemperatureString()));
+        holder.mWeatherIcon.setImageURL(forecast.getIllustrateWeather().getIconLink());
         holder.mWindDirView.setText(forecast.getWindDir());
-        holder.mWindSpeedView.setText(mContext.getString(R.string.mc_place_holder, forecast.getWindSpeed()));
+        holder.mWindSpeedView.setText(mContext.getString(R.string.mc_place_holder, forecast.getWindSpeedInt()));
         holder.mRelativeHumidity.setText(mContext.getString(R.string.percentage_place_holder, forecast.getRelativeHumidity()));
 
         if (position == 0) {
