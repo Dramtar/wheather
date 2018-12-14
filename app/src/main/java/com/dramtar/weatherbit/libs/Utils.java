@@ -26,6 +26,8 @@ import androidx.core.content.PermissionChecker;
  */
 public final class Utils {
 
+    public static final String KEY_FORECAST = "forecast";
+    public static final String KEY_CURRENT_CITY = "city_name";
     public static final String TIME_PATTERN = "HH:mm";
     public static final String DATE_TIME_PATTERN = "EEE, MMM d";
     public static final String ICON_LINK_PREFIX = "https://www.weatherbit.io/static/img/icons/";
