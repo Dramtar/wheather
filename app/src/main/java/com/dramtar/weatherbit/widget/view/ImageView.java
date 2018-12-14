@@ -1,6 +1,6 @@
 package com.dramtar.weatherbit.widget.view;
 
-/**
+/*
  * Created by Dramtar on 2018-12-07
  */
 

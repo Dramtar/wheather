@@ -19,14 +19,6 @@ import static com.dramtar.weatherbit.libs.Utils.ICON_LINK_PREFIX;
 
 @Entity()
 public class ForecastEntityCurrent implements Forecast {
-    public int getId() {
-        return mId;
-    }
-
-    public void setId(int mId) {
-        this.mId = mId;
-    }
-
     @PrimaryKey(autoGenerate = true)
     private int mId;
 
@@ -54,12 +46,122 @@ public class ForecastEntityCurrent implements Forecast {
     @SerializedName("city_name")
     private String mCityName;
 
+    @SerializedName("weather")
+    private IllustrateWeather mIllustrationWeather;
+
+    public ForecastEntityCurrent() {
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int mId) {
+        this.mId = mId;
+    }
+
     public IllustrateWeather getIllustrationWeather() {
         return mIllustrationWeather;
     }
 
-    @SerializedName("weather")
-    private IllustrateWeather mIllustrationWeather;
+    public void setIllustrationWeather(IllustrateWeather mIllustrationWeather) {
+        this.mIllustrationWeather = mIllustrationWeather;
+    }
+
+    public double getWindSpeed() {
+        return mWindSpeed;
+    }
+
+    public void setWindSpeed(double mWindSpeed) {
+        this.mWindSpeed = mWindSpeed;
+    }
+
+    public double getTemperature() {
+        return mTemperature;
+    }
+
+    public void setTemperature(double mTemperature) {
+        this.mTemperature = mTemperature;
+    }
+
+    @Override
+    public String getWindDir() {
+        return mWindDir;
+    }
+
+    public void setWindDir(String mWindDir) {
+        this.mWindDir = mWindDir;
+    }
+
+    @Override
+    public String getTemperatureString() {
+        return String.valueOf(mTemperature);
+    }
+
+    @Override
+    public String getCityName() {
+        return mCityName;
+    }
+
+    public void setCityName(String mCityName) {
+        this.mCityName = mCityName;
+    }
+
+    @Override
+    public String getTimeString() {
+        return Utils.formatDate(Utils.TIME_PATTERN, (long) getTimeStamp() * 1000);
+    }
+
+    @Override
+    public String getDateString() {
+        return Utils.formatDate(Utils.DATE_TIME_PATTERN, (long) getTimeStamp() * 1000);
+    }
+
+    @Override
+    public IllustrateWeather getIllustrateWeather() {
+        return mIllustrationWeather;
+    }
+
+    @Override
+    public double getLatitude() {
+        return mLatitude;
+    }
+
+    public void setLatitude(double mLatitude) {
+        this.mLatitude = mLatitude;
+    }
+
+    @Override
+    public int getWindSpeedInt() {
+        return (int) mWindSpeed;
+    }
+
+    @Override
+    public int getRelativeHumidity() {
+        return mRelativeHumidity;
+    }
+
+    public void setRelativeHumidity(int mRelativeHumidity) {
+        this.mRelativeHumidity = mRelativeHumidity;
+    }
+
+    @Override
+    public double getLongitude() {
+        return mLongitude;
+    }
+
+    public void setLongitude(double mLongitude) {
+        this.mLongitude = mLongitude;
+    }
+
+    @Override
+    public double getTimeStamp() {
+        return mTimeStamp;
+    }
+
+    public void setTimeStamp(double mTimeStamp) {
+        this.mTimeStamp = mTimeStamp;
+    }
 
     public static class IllustrateWeather implements Serializable {
         @SerializedName("icon")
@@ -79,108 +181,5 @@ public class ForecastEntityCurrent implements Forecast {
         public String getIconLink() {
             return ICON_LINK_PREFIX + mIconCode + ICON_LINK_POSTFIX;
         }
-    }
-
-    public ForecastEntityCurrent() {
-    }
-
-    @Override
-    public int getWindSpeedInt() {
-        return (int)mWindSpeed;
-    }
-
-    @Override
-    public int getRelativeHumidity() {
-        return mRelativeHumidity;
-    }
-
-
-    public double getWindSpeed() {
-        return mWindSpeed;
-    }
-
-    @Override
-    public double getLatitude() {
-        return mLatitude;
-    }
-
-    @Override
-    public double getLongitude() {
-        return mLongitude;
-    }
-
-    @Override
-    public double getTimeStamp() {
-        return mTimeStamp;
-    }
-
-    public double getTemperature() {
-        return mTemperature;
-    }
-
-    @Override
-    public String getWindDir() {
-        return mWindDir;
-    }
-
-    @Override
-    public String getTemperatureString() {
-        return String.valueOf(mTemperature);
-    }
-
-    @Override
-    public String getCityName() {
-        return mCityName;
-    }
-
-    @Override
-    public String getTimeString() {
-        return Utils.formatDate(Utils.TIME_PATTERN, (long) getTimeStamp() * 1000);
-    }
-
-    @Override
-    public String getDateString() {
-        return Utils.formatDate(Utils.DATE_TIME_PATTERN, (long) getTimeStamp() * 1000);
-    }
-
-    @Override
-    public IllustrateWeather getIllustrateWeather() {
-        return mIllustrationWeather;
-    }
-
-    public void setWindDir(String mWindDir) {
-        this.mWindDir = mWindDir;
-    }
-
-    public void setTemperature(double mTemperature) {
-        this.mTemperature = mTemperature;
-    }
-
-    public void setTimeStamp(double mTimeStamp) {
-        this.mTimeStamp = mTimeStamp;
-    }
-
-    public void setLatitude(double mLatitude) {
-        this.mLatitude = mLatitude;
-    }
-
-    public void setLongitude(double mLongitude) {
-        this.mLongitude = mLongitude;
-    }
-
-    public void setRelativeHumidity(int mRelativeHumidity) {
-        this.mRelativeHumidity = mRelativeHumidity;
-    }
-
-    public void setWindSpeed(double mWindSpeed) {
-        this.mWindSpeed = mWindSpeed;
-    }
-
-    public void setCityName(String mCityName) {
-        this.mCityName = mCityName;
-    }
-
-    public void setIllustrationWeather(IllustrateWeather mIllustrationWeather) {
-        this.mIllustrationWeather = mIllustrationWeather;
     }
 }

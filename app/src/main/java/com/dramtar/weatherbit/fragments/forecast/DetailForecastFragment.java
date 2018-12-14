@@ -1,19 +1,17 @@
-package com.dramtar.weatherbit.fragments;
+package com.dramtar.weatherbit.fragments.forecast;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.dramtar.weatherbit.MainActivity;
 import com.dramtar.weatherbit.R;
+import com.dramtar.weatherbit.fragments.MapFragment;
+import com.dramtar.weatherbit.fragments.base.BaseNetFragment;
 import com.dramtar.weatherbit.libs.model.Forecast;
-import com.dramtar.weatherbit.libs.network.Network;
 import com.dramtar.weatherbit.libs.network.response.CurrentWeatherResponse;
-import com.dramtar.weatherbit.libs.network.response.WeatherResponse;
 import com.dramtar.weatherbit.widget.view.ImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -28,17 +26,16 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import retrofit.RetrofitError;
+
+import static com.dramtar.weatherbit.libs.Utils.KEY_CURRENT_CITY;
+import static com.dramtar.weatherbit.libs.Utils.KEY_FORECAST;
 
 /**
  * Created by Dramtar on 2018-12-09
  */
-public class DetailForecastFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    private static final String KEY_FORECAST = "market";
-
+public class DetailForecastFragment extends BaseNetFragment implements SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.city_name)
     TextView mCityName;
 
@@ -63,7 +60,6 @@ public class DetailForecastFragment extends Fragment implements SwipeRefreshLayo
     @BindView(R.id.coordinator)
     CoordinatorLayout mContainer;
 
-    private Unbinder mUnBinder;
     private Forecast mForecast;
 
     public static DetailForecastFragment newInstance(@NonNull Forecast forecast) {
@@ -76,16 +72,20 @@ public class DetailForecastFragment extends Fragment implements SwipeRefreshLayo
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_detail_forecast, container, false);
-        mUnBinder = ButterKnife.bind(this, view);
+    protected int getLayoutId() {
+        return R.layout.fragment_detail_forecast;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mRefresher.setOnRefreshListener(this);
 
         getActivity().setTitle(R.string.title_detail_fragment);
 
         Bundle args = getArguments();
         if (args != null) {
-            mForecast = (Forecast) getArguments().getSerializable(KEY_FORECAST);
+            mForecast = (Forecast) args.getSerializable(KEY_FORECAST);
             update();
         }
 
@@ -94,19 +94,20 @@ public class DetailForecastFragment extends Fragment implements SwipeRefreshLayo
         mViewPager.setAdapter(new PagerAdapter(getChildFragmentManager(), getActivity()));
         mTabLayout.setupWithViewPager(mViewPager);
         refresh();
-        return view;
     }
 
     private void refresh() {
         mRefresher.setRefreshing(false);
-        Network.getInstance().getCurrentWeather(mForecast.getLatitude(), mForecast.getLongitude());
+        mNetWork.getCurrentWeather(mForecast.getLatitude(), mForecast.getLongitude());
     }
 
     @Subscribe
     public void onCurrentWeatherResponse(CurrentWeatherResponse response) {
         mRefresher.setRefreshing(false);
         mForecast = response.getForecast();
-        MainActivity.saveCurrentForecast(response.getForecast());
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+        editor.putString(KEY_CURRENT_CITY, mForecast.getCityName());
+        editor.apply();
         update();
     }
 
@@ -133,25 +134,7 @@ public class DetailForecastFragment extends Fragment implements SwipeRefreshLayo
 
     @OnClick(R.id.to_map)
     public void onClickToMap() {
-        getFragmentManager().beginTransaction().replace(R.id.container, new MapFragment()).commitAllowingStateLoss();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mUnBinder.unbind();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Network.unregister(this);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Network.register(this);
+        getFragmentManager().beginTransaction().replace(R.id.container, MapFragment.newInstance(mForecast)).commitAllowingStateLoss();
     }
 
     private class PagerAdapter extends FragmentPagerAdapter {
@@ -186,9 +169,9 @@ public class DetailForecastFragment extends Fragment implements SwipeRefreshLayo
         public Fragment getItem(int position) {
             switch (position) {
                 case PAGE_DAY_FORECAST:
-                    return new DayForecastFragment();
+                    return DayForecastFragment.newInstance(mForecast);
                 case PAGE_WEEK_FORECAST:
-                    return new WeekForecastFragment();
+                    return WeekForecastFragment.newInstance(mForecast);
             }
             return null;
         }

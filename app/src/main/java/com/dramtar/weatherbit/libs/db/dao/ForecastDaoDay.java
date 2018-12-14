@@ -16,9 +16,6 @@ public interface ForecastDaoDay {
     @Query("SELECT * FROM forecast_day where mCityName = :city")
     List<ForecastEntityDay> getForecastsByCity(String city);
 
-    @Query("SELECT * FROM forecast_day where mCityName = :city ORDER BY ABS(mTimeStamp - :timeStamp) LIMIT 1")
-    ForecastEntityDay getLastCurrentForecast(String city, double timeStamp);
-
     @Insert
     void insertForecasts(List<ForecastEntityDay> forecasts);
 

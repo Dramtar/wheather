@@ -1,21 +1,18 @@
 package com.dramtar.weatherbit.fragments;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.dramtar.weatherbit.MainActivity;
 import com.dramtar.weatherbit.R;
+import com.dramtar.weatherbit.fragments.base.BaseNetFragment;
+import com.dramtar.weatherbit.fragments.forecast.DetailForecastFragment;
 import com.dramtar.weatherbit.libs.Utils;
 import com.dramtar.weatherbit.libs.model.Forecast;
-import com.dramtar.weatherbit.libs.network.Network;
 import com.dramtar.weatherbit.libs.network.response.CurrentWeatherResponse;
-import com.dramtar.weatherbit.libs.network.response.WeatherResponse;
 import com.dramtar.weatherbit.widget.view.ConnectionErrorDialog;
 import com.dramtar.weatherbit.widget.view.ImageView;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,19 +26,19 @@ import com.squareup.otto.Subscribe;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import retrofit.RetrofitError;
+
+import static com.dramtar.weatherbit.libs.Utils.KEY_FORECAST;
 
 /**
  * Created by Dramtar on 2018-12-06
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends BaseNetFragment implements OnMapReadyCallback {
     @BindView(R.id.city_name)
     TextView mCityName;
 
@@ -61,22 +58,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     CoordinatorLayout mContainer;
     private GoogleMap mMap;
-    private Unbinder mUnBinder;
     private SupportMapFragment mMapFragment;
     private Forecast mForecast;
     private PopupWindow mPopupWindow;
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
-        getActivity().setTitle(R.string.title_activity_maps);
-        mForecast = MainActivity.getForecast();
+    public static MapFragment newInstance(@NonNull Forecast forecast) {
+        Bundle args = new Bundle();
+        args.putSerializable(KEY_FORECAST, forecast);
 
-        mUnBinder = ButterKnife.bind(this, view);
+        MapFragment fragment = new MapFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_map;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle(R.string.title_activity_maps);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            mForecast = (Forecast) args.getSerializable(KEY_FORECAST);
+        }
 
         mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
         mMapFragment.getMapAsync(this);
-        return view;
     }
 
     @CallSuper
@@ -85,7 +96,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if (mMapFragment != null) {
             getChildFragmentManager().beginTransaction().remove(mMapFragment).commitAllowingStateLoss();
         }
-        mUnBinder.unbind();
     }
 
     @Override
@@ -98,9 +108,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             LatLng latLng = new LatLng(mForecast.getLatitude(), mForecast.getLongitude());
             mMap.clear();
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-            mMap.addMarker(new MarkerOptions().position(latLng).icon(Utils.bitmapDescriptorFromVector(getActivity(),R.drawable.ic_pin)));
+            mMap.addMarker(new MarkerOptions().position(latLng).icon(Utils.bitmapDescriptorFromVector(getActivity(), R.drawable.ic_pin)));
 
-            Network.getInstance().getCurrentWeather(latLng.latitude, latLng.longitude);
+            mNetWork.getCurrentWeather(latLng.latitude, latLng.longitude);
         } else if (!Utils.isHasInternetConnection(getActivity())) {
             showErrorDialog();
         }
@@ -109,8 +119,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onMapClick(LatLng latLng) {
                 mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(latLng).icon(Utils.bitmapDescriptorFromVector(getActivity(),R.drawable.ic_pin)));
-                Network.getInstance().getCurrentWeather(latLng.latitude, latLng.longitude);
+                mMap.addMarker(new MarkerOptions().position(latLng).icon(Utils.bitmapDescriptorFromVector(getActivity(), R.drawable.ic_pin)));
+                mNetWork.getCurrentWeather(latLng.latitude, latLng.longitude);
             }
         });
     }
@@ -119,8 +129,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onCurrentWeatherResponse(CurrentWeatherResponse response) {
         mForecast = response.getForecast();
         update();
-        MainActivity.setForecast(mForecast);
-
     }
 
     @Subscribe
@@ -169,17 +177,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onClickMoreDetail() {
         FragmentManager manager = getActivity().getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.container, DetailForecastFragment.newInstance(mForecast)).addToBackStack("map").commitAllowingStateLoss();
-    }
-
-    @Override
-    public void onStart() {
-        Network.register(this);
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        Network.unregister(this);
-        super.onStop();
     }
 }
