@@ -30,15 +30,6 @@ public class WeekForecastFragment extends BaseNetFragment {
     private AppDB mDBHelper;
     private Forecast mForecast;
 
-    public static WeekForecastFragment newInstance(@NonNull Forecast forecast) {
-        Bundle args = new Bundle();
-        args.putSerializable(KEY_FORECAST, forecast);
-
-        WeekForecastFragment fragment = new WeekForecastFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_list_forecasts;
@@ -47,7 +38,7 @@ public class WeekForecastFragment extends BaseNetFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Bundle args = getArguments();
+        Bundle args = getActivity().getIntent().getExtras();
         if (args != null) {
             mForecast = (Forecast) args.getSerializable(KEY_FORECAST);
 

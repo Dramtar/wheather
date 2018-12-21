@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import static com.dramtar.weatherbit.libs.Utils.KEY_CURRENT_CITY;
+import static com.dramtar.weatherbit.libs.Utils.KEY_FORECAST;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -28,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
         Fragment fragment;
         if (forecast != null) {
-            fragment = DetailForecastFragment.newInstance(forecast);
+            getIntent().putExtra(KEY_FORECAST, forecast);
+            fragment = new DetailForecastFragment();
         } else {
             fragment = new MapFragment();
         }
