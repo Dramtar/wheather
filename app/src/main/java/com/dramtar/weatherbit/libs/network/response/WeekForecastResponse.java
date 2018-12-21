@@ -15,6 +15,12 @@ public class WeekForecastResponse extends Response {
     @SerializedName("city_name")
     private String mCityName;
 
+    @SerializedName("lat")
+    private double mLatitude;
+
+    @SerializedName("lon")
+    private double mLongitude;
+
     public ForecastEntityWeek getForecast() {
         return mForecasts.get(0);
     }
@@ -28,6 +34,8 @@ public class WeekForecastResponse extends Response {
         super.success();
         for (ForecastEntityWeek forecastEntityDay : mForecasts) {
             forecastEntityDay.setCityName(mCityName);
+            forecastEntityDay.setLatitude(mLatitude);
+            forecastEntityDay.setLongitude(mLongitude);
         }
     }
 }

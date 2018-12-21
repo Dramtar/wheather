@@ -30,15 +30,6 @@ public class DayForecastFragment extends BaseNetFragment {
     private AppDB mDBHelper;
     private Forecast mForecast;
 
-    public static DayForecastFragment newInstance(@NonNull Forecast forecast) {
-        Bundle args = new Bundle();
-        args.putSerializable(KEY_FORECAST, forecast);
-
-        DayForecastFragment fragment = new DayForecastFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_list_forecasts;
@@ -49,7 +40,7 @@ public class DayForecastFragment extends BaseNetFragment {
         super.onViewCreated(view, savedInstanceState);
         mDBHelper = AppDB.getInstance(getContext());
 
-        Bundle args = getArguments();
+        Bundle args = getActivity().getIntent().getExtras();
         if (args != null) {
             mForecast = (Forecast) args.getSerializable(KEY_FORECAST);
 

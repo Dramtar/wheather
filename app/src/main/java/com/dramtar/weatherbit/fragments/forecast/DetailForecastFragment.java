@@ -62,15 +62,6 @@ public class DetailForecastFragment extends BaseNetFragment implements SwipeRefr
 
     private Forecast mForecast;
 
-    public static DetailForecastFragment newInstance(@NonNull Forecast forecast) {
-        Bundle args = new Bundle();
-        args.putSerializable(KEY_FORECAST, forecast);
-
-        DetailForecastFragment fragment = new DetailForecastFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_detail_forecast;
@@ -83,7 +74,7 @@ public class DetailForecastFragment extends BaseNetFragment implements SwipeRefr
 
         getActivity().setTitle(R.string.title_detail_fragment);
 
-        Bundle args = getArguments();
+        Bundle args = getActivity().getIntent().getExtras();
         if (args != null) {
             mForecast = (Forecast) args.getSerializable(KEY_FORECAST);
             update();
@@ -169,9 +160,9 @@ public class DetailForecastFragment extends BaseNetFragment implements SwipeRefr
         public Fragment getItem(int position) {
             switch (position) {
                 case PAGE_DAY_FORECAST:
-                    return DayForecastFragment.newInstance(mForecast);
+                    return new DayForecastFragment();
                 case PAGE_WEEK_FORECAST:
-                    return WeekForecastFragment.newInstance(mForecast);
+                    return new WeekForecastFragment();
             }
             return null;
         }
