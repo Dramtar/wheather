@@ -175,7 +175,8 @@ public class MapFragment extends BaseNetFragment implements OnMapReadyCallback {
 
     @OnClick(R.id.bubble_container)
     public void onClickMoreDetail() {
+        getActivity().getIntent().putExtra(KEY_FORECAST, mForecast);
         FragmentManager manager = getActivity().getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.container, DetailForecastFragment.newInstance(mForecast)).addToBackStack("map").commitAllowingStateLoss();
+        manager.beginTransaction().replace(R.id.container, new DetailForecastFragment()).addToBackStack("map").commitAllowingStateLoss();
     }
 }
